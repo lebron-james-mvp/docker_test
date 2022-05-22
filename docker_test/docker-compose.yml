@@ -1,0 +1,44 @@
+version: "3"
+services:
+  eureka-server:
+    image: 121.40.137.157:5000/microservice-eureka-server:1.0-SNAPSHOT
+    restart: on-failure
+    ports:
+      - 8761:8761
+    networks:
+      - microservice-net
+
+  gateway-zuul:
+    image:  121.40.137.157:5000/microservice-gateway-zuul:1.0-SNAPSHOT
+    restart: on-failure
+    ports:
+      - 8050:8050
+    networks:
+      - microservice-net
+    depends_on:
+      - eureka-server
+
+  order-service:
+    image:  121.40.137.157:5000/microservice-orderservice:1.0-SNAPSHOT
+    restart: on-failure
+    ports:
+      - 7900:7900
+    networks:
+      - microservice-net
+    depends_on:
+      - eureka-server
+
+  user-service:
+    image:  121.40.137.157:5000/microservice-userservice:1.0-SNAPSHOT
+    restart: on-failure
+    ports:
+      - 8030:8030
+    networks:
+      - microservice-net
+    depends_on:
+      - eureka-server
+
+networks:
+  microservice-net:
+volumes:
+  microservice-mysql:
